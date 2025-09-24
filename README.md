@@ -16,7 +16,7 @@ npx ts-node src/index.ts sample_input.txt
 npm run build
 node dist/index.js sample_input.txt
 
-# Example input in( `sample_input.txt`)
+# Example input in ( `sample_input.txt`)
 
 100 5
 PKG1 50 30 OFR001
@@ -26,7 +26,7 @@ PKG4 110 60 OFR002
 PKG5 155 95 NA
 2 70 200
 
-# Example output(printed to stdout)
+# Example output (printed to stdout)
 PKG1 0.00 750.00 3.98
 PKG2 0.00 1475.00 1.78
 PKG3 0.00 2350.00 1.42
