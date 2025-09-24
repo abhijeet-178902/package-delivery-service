@@ -1,5 +1,8 @@
 # package-delivery-service
 
+# prequesite
+1. node latest version should be installed,  
+2. Install git bash  to clone the repo or run npm related commands
 ##  steps to instal the project
 
 1. install and run/open git bash(or any terminal)
