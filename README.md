@@ -37,40 +37,55 @@ Problem in short Calculate
  (2) estimated delivery times for each package given a fleet of vehicles (count, max speed, and max load per vehicle). The scheduler should pack as many packages as possible in each trip, prefer heavier shipments when counts tie
 
 # High level approach (step-by-step)
+1. Read the input
+The program expects a file path. First line has the base delivery cost and number of packages. Then it reads each package (id, weight, distance, offer code).
+If the input also includes vehicle info (number of vehicles, max speed, max load), we also run the scheduling part. Otherwise, we just calculate the delivery costs.
 
-1. Parsing input — support either a file path argument or stdin. The parser reads the base delivery cost and the listed packages (id, weight, distance, offer code). 
-2. If vehicle information is present (numberOfVehicles, maxSpeed, maxCarriableWeight), the scheduler runs; otherwise we only print cost results.
-
-3. Cost calculation — for each package:
+2. Figure out costs
+For each package, the cost formula is:
 
 deliveryCost = baseDeliveryCost + weight * 10 + distance * 5
 
-4. Determine the offer (if any) and whether package satisfies offer criteria. Offers are encoded as rules and the engine is extensible: you can add more rules into src/offers.ts(scalable)
 
---discount = deliveryCost * offerPercent (if eligible)
+3. Then I check if the package qualifies for any discount offer. If yes,I  apply:
 
---totalCost = deliveryCost - discount
+discount = deliveryCost * offerPercent
+totalCost = deliveryCost - discount
 
-5. Scheduling & delivery-time estimation — only executed if vehicle data is present.
 
---I have model vehicles each with a nextAvailableTime (initially 0). Vehicles are identical (same speed & max load) per problem statement.
+4. Scheduling deliveries (only if vehicles are provided)
+I treat every vehicle as identical. Each starts free at time 0 and has two limits: max speed and max load.
 
-6. While there are undelivered packages:
-Pick the vehicle that becomes available the earliest.
+--The idea:
 
-7. From remaining packages selecting the best shipment: 
-the subset with the maximum number of packages that fits into the vehicle capacity.
- If multiple subsets have the same number of packages, prefer the subset with the larger total weight.
-  If still tied, prefer the subset whose maximum distance is smaller (i.e., shipment that will complete sooner).
+Always pick the vehicle that’s available the earliest.
 
-8. Assign estimatedDeliveryTime for each package in the shipment as vehicleStartTime + package.distance / speed.
+From the undelivered packages, pick the best possible shipment that fits the load:
 
-9. Update the vehicle's availability to vehicleStartTime + 2 * (maxDistanceInShipment / speed) (vehicle must go and return).
+First, maximize the number of packages.
 
-Implementation detail: to find the best shipment I attempt an exact combinatorial search when the number of remaining packages is small (<= 15) so that I could maximize package count; 
+If there’s a tie, choose the heavier set.
 
-can improve this solution with better algo
-10. Output — prints each package record (in the original input order) as:
+If still tied, choose the one with the smaller max distance (so it finishes sooner).
 
-PKG_ID <discount> <total_cost> [estimated_delivery_time-if-vehicles-provided]
+5. Once a shipment is chosen:
 
+Each package gets an estimatedDeliveryTime = startTime + distance / speed.
+
+The vehicle’s next free time is updated to startTime + 2 * (farthestDistance / speed) (because it has to come back).
+
+6. Under the hood:
+
+If there are not too many packages left (≤15), I actually try every possible subset so we truly get the “best” one.
+
+If there are more, I fall back to a greedy “heaviest-first” approach for performance.
+
+This works well but could definitely be optimized further with smarter algorithms.
+
+6. Print results
+Finally, we print the output in the same order as input:
+
+PKG_ID <discount> <total_cost> [estimated_time_if_any]
+
+
+note: Times are shown with two decimals.
