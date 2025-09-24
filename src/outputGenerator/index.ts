@@ -1,4 +1,4 @@
-import { PackageComputed, PackageInput, VehicleSpec } from "../interfaces";
+import { PackageComputed } from "../interfaces";
 import { fmtMoney, fmtTime } from '../utils';
 
 export function formatOutput(pkgs: PackageComputed[]) {

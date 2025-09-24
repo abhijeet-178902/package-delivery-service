@@ -1,19 +1,19 @@
-import { PackageComputed } from '../interfaces';
-import { truncateTime } from '../utils';
+import { PackageComputed } from '../../interfaces';
+import { truncateTime } from '../../utils';
 
-// Internal vehicle representation for the simulation.
 type Vehicle = { id: number; nextAvailableAt: number };
 
 /**
- * Annotate packages with estimatedDeliveryTime (hours) by simulating vehicles.
- * - We always pick the vehicle that becomes available the earliest.
- * - For that vehicle we try to select the best shipment:
- *   1) maximize number of packages
- *   2) if tie, prefer heavier total weight
- *   3) if tie, prefer shipment with smaller max distance
- *
- * The selection does an exact search for up to 15 remaining packages; beyond that it will use a greedy heuristic
- * for performance.
+  packages with estimatedDeliveryTime (hours) by simulating vehicles.
+   always pick the vehicle that becomes available the earliest.
+  For that vehicle we try to select the best shipment:
+    1) maximize number of packages
+    2) if tie, prefer heavier total weight
+    3) if tie, prefer shipment with smaller max distance
+ 
+  The selection does an exact search for up to 15 remaining packages;
+
+  can improve this solution with better algo
  */
 export function scheduleDeliveries(packages: PackageComputed[], vehicleCount: number, maxLoadKg: number, maxSpeedKmPerHour: number) {
   if (vehicleCount <= 0) return;
@@ -25,19 +25,19 @@ export function scheduleDeliveries(packages: PackageComputed[], vehicleCount: nu
     const n = remaining.length;
     if (n === 0) return [];
 
-    // If any single package exceeds capacity it's a problem.
+    // If any single package exceeds capacity
     const tooHeavy = remaining.find(p => p.weight > maxLoadKg);
     if (tooHeavy) {
       throw new Error(`Package ${tooHeavy.id} weight ${tooHeavy.weight} exceeds vehicle capacity ${maxLoadKg}`);
     }
 
-    // Exact combinatorial search for small n
+   
     if (n <= 15) {
       let bestIndices: number[] = [];
       let bestWeight = -1;
       let bestMaxDist = Infinity;
 
-      // Try sizes from n down to 1 so we find the maximum count quickly.
+      // Try sizes from n down to 1 so I find the maximum count quickly.
       for (let size = n; size >= 1; size--) {
         let found = false;
 
@@ -69,7 +69,7 @@ export function scheduleDeliveries(packages: PackageComputed[], vehicleCount: nu
       return bestIndices;
     }
 
-    // Greedy fallback: heaviest-first packing
+    // heaviest-first packing
     const order = remaining.map((_, i) => i).sort((a, b) => remaining[b].weight - remaining[a].weight);
     const pick: number[] = [];
     let sumW = 0;

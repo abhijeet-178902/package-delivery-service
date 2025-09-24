@@ -69,6 +69,7 @@ the subset with the maximum number of packages that fits into the vehicle capaci
 
 Implementation detail: to find the best shipment I attempt an exact combinatorial search when the number of remaining packages is small (<= 15) so that I could maximize package count; 
 
+can improve this solution with better algo
 10. Output — prints each package record (in the original input order) as:
 
 PKG_ID <discount> <total_cost> [estimated_delivery_time-if-vehicles-provided]

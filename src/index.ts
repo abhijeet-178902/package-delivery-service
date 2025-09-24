@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 
-import { parseInput } from './input';
-import { formatOutput } from './output';
-import { compute } from './compute';
+import { parseInput } from './inputParser';
+import { formatOutput } from './outputGenerator';
+import { compute } from './core/index';
 
 if (require.main === module) {
   const filename = process.argv[2];

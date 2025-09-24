@@ -1,7 +1,6 @@
-import { PackageInput } from '../interfaces'
-import { roundMoney } from '../utils';
+import { PackageInput } from '../../interfaces'
+import { roundMoney } from '../../utils';
 
-// Data-driven offer rules. Add rows here to introduce new offers.
 type OfferRule = {
   code: string;
   percent: number; // discount percent
@@ -11,8 +10,7 @@ type OfferRule = {
   maxDistance: number;
 };
 
-const RULES: OfferRule[] = [
-  // These are taken from the challenge PDF. Adjust if needed.
+const RULES: OfferRule[] = [ //from problem pdf
   { code: 'OFR001', percent: 10, minWeight: 70, maxWeight: 200, minDistance: 0, maxDistance: 200 },
   { code: 'OFR002', percent: 7, minWeight: 100, maxWeight: 250, minDistance: 50, maxDistance: 150 },
   { code: 'OFR003', percent: 5, minWeight: 10, maxWeight: 150, minDistance: 50, maxDistance: 250 }

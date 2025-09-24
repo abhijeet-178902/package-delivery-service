@@ -1,6 +1,6 @@
 import { PackageInput, PackageComputed, VehicleSpec } from '../interfaces';
-import { calculateDiscount } from '../offers';
-import { scheduleDeliveries } from '../scheduler';
+import { calculateDiscount } from '../core/offers';
+import { scheduleDeliveries } from '../core/scheduler';
 import { roundMoney } from '../utils';
 
 export function compute(base: number, pkgsIn: PackageInput[], vehicles?: VehicleSpec) {
