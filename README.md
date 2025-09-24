@@ -26,7 +26,7 @@ PKG4 110 60 OFR002
 PKG5 155 95 NA
 2 70 200
 
-# Example output (printed to stdout)
+# Example output (printed to stdout) (mentioned in sample-output.txt)
 PKG1 0.00 750.00 3.98
 PKG2 0.00 1475.00 1.78
 PKG3 0.00 2350.00 1.42
